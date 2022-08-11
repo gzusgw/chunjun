@@ -16,22 +16,19 @@
  * limitations under the License.
  */
 
-package com.dtstack.chunjun.connector.test;
+package com.dtstack.chunjun.connector.containers.mysql;
 
-import com.dtstack.chunjun.connector.test.entity.JobAccumulatorResult;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
 
-import org.junit.Assert;
-import org.junit.Test;
+public class Mysql5Container extends MysqlBaseContainer {
+    private static final URL MYSQL5_DOCKERFILE =
+            MysqlBaseContainer.class.getClassLoader().getResource("docker/mysql/Mysql5Dockerfile");
 
-import java.time.Duration;
+    private static final String MYSQL5_HOST = "chunjun-e2e-mysql5";
 
-public class StreamE2eTests extends ChunjunBaseE2eTest {
-
-    @Test
-    public void test() throws Exception {
-        submitSyncJobOnStandLone(CHUNJUN_HOME + "/chunjun-examples/json/stream/stream.json");
-        JobAccumulatorResult jobAccumulatorResult = waitUntilJobFinished(Duration.ofMinutes(30));
-
-        Assert.assertEquals(jobAccumulatorResult.getNumRead(), 30);
+    public Mysql5Container() throws URISyntaxException {
+        super(MYSQL5_HOST, Paths.get(MYSQL5_DOCKERFILE.toURI()));
     }
 }
